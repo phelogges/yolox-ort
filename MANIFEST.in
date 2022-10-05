@@ -1,0 +1,5 @@
+include yolox_ort/assets/images/test1.jpeg
+include yolox_ort/assets/images/test2.jpeg
+include yolox_ort/assets/images/test3.jpeg
+
+include yolox_ort/assets/models/yolox_nano.onnx
