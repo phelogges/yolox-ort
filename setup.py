@@ -7,13 +7,6 @@ import re
 import setuptools
 
 
-def get_package_dir():
-    pkg_dir = {
-        "yolox.tools": "tools",
-        "yolox.exp.default": "exps/default",
-    }
-    return pkg_dir
-
 
 def get_install_requirements():
     with open("requirements.txt", "r", encoding="utf-8") as f:
@@ -22,7 +15,7 @@ def get_install_requirements():
     return reqs
 
 
-def get_yolox_version():
+def get_version():
     with open("yolox_ort/__init__.py", "r") as f:
         version = re.search(
             r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]',
@@ -39,9 +32,9 @@ def get_long_description():
 
 setuptools.setup(
     name="yolox_ort",
-    version=get_yolox_version(),
-    author="Raichu",
-    url="https://github.com/Megvii-BaseDetection/YOLOX",
+    version=get_version(),
+    author="phelogges",
+    url="https://github.com/phelogges/yolox-ort",
     packages=["yolox_ort"],
     include_package_data=True,  # enable MANIFEST.in file
     python_requires=">=3.6",
@@ -54,8 +47,6 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License",
     ],
     project_urls={
-        "Documentation": "https://yolox.readthedocs.io",
-        "Source": "https://github.com/Megvii-BaseDetection/YOLOX",
-        "Tracker": "https://github.com/Megvii-BaseDetection/YOLOX/issues",
+        "Source": "https://github.com/phelogges/yolox-ort",
     },
 )

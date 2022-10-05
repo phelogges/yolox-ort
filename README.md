@@ -13,9 +13,9 @@ $ # python setup.py develop # not install into your site-package, just a soft li
 # Usage
 ### Commandline
 ```shell
-$ python yolox_ort.commandline.py -f ${IMAGE_PATH} -d ${OUTPUT_DIR} -m ${MODEL_FILE}
+$ python ${SITE-PACKAGES}/yolox_ort/commandline.py -f ${IMAGE_PATH} -d ${OUTPUT_DIR} -m ${MODEL_FILE}
 ```
-Also support video and camera sources, see yolox_ort/commandline.py for more detail
+Also support video and camera sources, see yolox_ort/commandline.py for more details
 
 ### As library
 ```python
@@ -33,13 +33,14 @@ dets = detector.detect_from_bgr_ndarray(bgr)
 
 img = yolox_ort.utils.draw(bgr, dets)
 cv2.imwrite("result.jpg", img)
+yolox_ort.utils.write_dets_into_json("result.json", dets)
 
 ```
 
 ## Models
 Currently this package included yolox_nano.onnx model in yolox_ort/assets/models/yolox_nano.onnx.
 
-Your can download more models from [YOLOX official project onnxruntime module](https://github.com/Megvii-BaseDetection/YOLOX/tree/main/demo/ONNXRuntime).
+You can download more models from [YOLOX official project onnxruntime module](https://github.com/Megvii-BaseDetection/YOLOX/tree/main/demo/ONNXRuntime).
 
 ## Reference
 [YOLOX official project](https://github.com/Megvii-BaseDetection/YOLOX)
