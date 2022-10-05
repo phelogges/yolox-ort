@@ -31,7 +31,7 @@ def arg_parser():
     parser.add_argument('-m', "--model_file", type=str, help="Model file path")
     parser.add_argument('-n', "--nms_threshold", type=float, default=0.45, help="NMS threshold")
     parser.add_argument('-s', "--score_threshold", type=float, default=0.3, help="Score threshold")
-    parser.add_argument('-v', "--verbose", type=int, default=1, help="0/1, whether to log in verbose mode")
+    parser.add_argument("--verbose", type=int, default=1, help="0/1, whether to log in verbose mode")
     return parser.parse_args()
 
 
@@ -81,12 +81,12 @@ if __name__ == "__main__":
         img = utils.draw(cv2.imread(source), dets)
         cv2.imwrite(saved_path, img)
         logger.info("Detection finished, result image saved into {}".format(saved_path))
-    elif source == 1:
+    elif source_type == 1:
         logger.info("Detecting video file {}".format(source))
         cap = cv2.VideoCapture(source)
-        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        fps = cap.get(cv2.CAP_PROP_FPS)
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
         frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
         logger.info("Video file meta infos: {}x{}, {} fps, {} frames".format(width, height, fps, frame_count))
 
@@ -103,6 +103,8 @@ if __name__ == "__main__":
                 ret, bgr = cap.read()
                 if ret:
                     dets = detector.detect_from_bgr_ndarray(bgr)
+                    if dets is None:
+                        continue
                     img = utils.draw(bgr, dets)
                     writer.write(img)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -122,12 +124,12 @@ if __name__ == "__main__":
             writer.release()
             logger.info("Capture and writer released, result saved into {}".format(saved_path))
 
-    elif source_type == 3:
+    elif source_type == 2:
         logger.info("Detecting from camera index {}".format(source))
         cap = cv2.VideoCapture(source)
-        width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-        height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        fps = cap.get(cv2.CAP_PROP_FPS)
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        fps = int(cap.get(cv2.CAP_PROP_FPS))
         logger.info("Camera index {} meta infos: {}x{}, {} fps".format(source, width, height, fps))
 
         fourcc = cv2.VideoWriter_fourcc('m', 'p', '4', 'v')
@@ -143,7 +145,10 @@ if __name__ == "__main__":
                 ret, bgr = cap.read()
                 if ret:
                     dets = detector.detect_from_bgr_ndarray(bgr)
+                    if dets is None:
+                        continue
                     img = utils.draw(bgr, dets)
+                    cv2.imshow("results", img)
                     writer.write(img)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         logger.info("Received quit input on frame index {}, "
@@ -154,6 +159,7 @@ if __name__ == "__main__":
                     break
             cap.release()
             writer.release()
+            cv2.destroyAllWindows()
             logger.info("Capture and writer released, result saved into {}".format(saved_path))
         except KeyboardInterrupt:
             logger.info("Received KeyboardInterrupt on frame index {}, "
